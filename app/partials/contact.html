@@ -1,0 +1,68 @@
+<div class="row-fluid">
+    <div class="span2">
+	<p>ATTN: CHRIS MULLIN</p>
+	<p>10260 SW Greenburg Rd. Suite #400</p>
+	<p>Portland, OR 97223</p>
+	</br>
+	<p>TEL 503.452.6922</p>
+	<p>FAX 503.452.6923</p>
+	<p><a href='mailto:info@paradigmconstruct.com?Subject=My%20Inquiry'>info@paradigmconstruct.com</a></p>
+	<p><img src="assets/img/logo_contact.png"/>
+	</div>
+	<div class="span3">
+<form class="form-horizontal" name="contactForm" ng-controller="contactForm">
+<fieldset>
+<div ng-hide="hideAlert" class="{{alertClass}}">{{alertMessage}}</div>
+<!-- Form Name -->
+<!--<legend>Contact</legend>-->
+
+<!-- Text input-->
+<div class="control-group">
+  <label class="control-label">subject</label>
+  <div class="controls">
+    <input id="subject" name="subject" type="text" placeholder="subject" class="input-xlarge" ng-model="subject">    
+  </div>
+</div>
+
+<!-- Text input-->
+<div class="control-group">
+  <label class="control-label">name</label>
+  <div class="controls">
+    <input id="name" name="cotnactName" type="text" placeholder="name" class="input-xlarge" ng-model="contactName" required>
+  </div>
+</div>
+
+<!-- Text input-->
+<div class="control-group">
+  <label class="control-label">email</label>
+  <div class="controls">
+    <input id="email" name="email" type="text" placeholder="email address" class="input-xlarge" ng-model="email" required>
+    
+  </div>
+</div>
+
+<!-- Text input-->
+<div class="control-group">
+  <label class="control-label">phone number</label>
+  <div class="controls">
+    <input id="phone" name="phone" type="text" placeholder="phone" class="input-xlarge" ng-model="phone" required>
+    
+  </div>
+</div>
+<!-- Textarea -->
+<div class="control-group">
+  <label class="control-label">message</label>
+  <div class="controls">                     
+    <textarea rows="6" id="message" name="mesasge" ng-model="message" required></textarea>
+  </div>
+</div>
+<div>
+  <button type="button" class="btn btn-medium pull-right" ng-click="formValidate(subject, contactName, email, phone, message)">Send</button>
+</div>
+
+<!--<div class="+{{message}}+" ng-show="showThis">OMG DIV CONTENT</div>-->
+
+</fieldset>
+</form>
+</div>
+</div>

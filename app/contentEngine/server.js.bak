@@ -1,0 +1,145 @@
+/**
+ * The following server is used to simulate an API that feeds data to the grid.
+ */
+
+'use strict';
+
+var express = require('express');
+var _ = require('../js/lib/underscore.js')._;
+var app = express();
+
+// CORS Middleware
+var allowCrossDomain = function(req, res, next) {
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
+    res.header('Access-Control-Allow-Headers', 'Content-Type');
+    
+    next();
+};
+
+app.configure(function () {
+    app.use(allowCrossDomain);
+});
+
+
+var chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXTZabcdefghiklmnopqrstuvwxyz';
+var firstname = ['Alice', 'Alex', 'Avery', 'Abduhl', 'Ari', 'Arnold', 'Audrey', 'Austin', 'Barry', 'Bob', 'Brent', 'Basha', 'Brock', 'Betty', 'Barbara', 'Brianna', 'Catherine', 'Cathy', 'Caren', 'Callen', 'Carrie', 'Carl', 'Cory', 'Dan', 'Darrel', 'David', 'Dave', 'Danny', 'Davis', 'Dalton', 'Dorinne', 'Debbie', 'Deborah', 'Davis', 'Devidas', 'Deron', 'Dorothy', 'Donald', 'Dominic', 'Edward', 'Eddie', 'Everett', 'Edison', 'Ellen', 'Eve', 'Ella', 'Emmma', 'Eli', 'Emory', 'Emmitt', 'Fabian', 'Francine', 'Frank', 'Garrett', 'Grant', 'Gary', 'Gene', 'George', 'Georgie', 'Gina', 'Hal', 'Harry', 'Henry', 'Joe', 'Kelly', 'Xavier', 'Zac'];
+var lastname = ['Allen', 'Brown', 'Covington', 'Davis', 'Emerson', 'Fallon', 'Grable', 'Highwater', 'Irving', 'Johnson', 'Kelley', 'Larson', 'Massie', 'Nelson', 'OBrien', 'Parrot', 'Quimby', 'Robertson', 'Sullivan', 'Taylor', 'Umbra', 'Warner', 'Yip', 'Zeller'];
+var profiles = ['ABC', 'AP', 'APGL', 'ARCK', 'ARGL', 'BMGL', 'BMGR', 'CMGR', 'DISP', 'FIMR', 'FPMS', 'JBST', 'L&R', 'MSTR', 'NVB', 'NVGL', 'OMGL', 'OMGR', 'PCAS', 'PCOR'];
+var accounts = ['BITT-A', 'BITT-F', 'BITT-I', 'BITT-P', 'BITT-S', 'BITT-V', 'MAINT'];
+
+function randomInteger(max, min) {
+    min = min || 0;
+
+    return Math.floor(Math.random() * (max - min)) + min;
+}
+
+function randomString(length) {
+  length = length ? length : 32;
+  
+  var string = '';
+  
+  for (var i = 0; i < length; i++) {
+    var randomNumber = randomInteger(chars.length);
+    string += chars.substring(randomNumber, randomNumber + 1);
+  }
+  
+  return string;
+}
+
+function randomFromList(list) {
+    return list[randomInteger(list.length)];
+}
+
+function randomBoolean() {
+    return randomFromList([true, false]);
+}
+
+function generateData() {
+    var i, data = [];
+    for (i = 0; i < 1000; i++) {
+        data.push({
+            'username': randomString(8),
+            'firstname': randomFromList(firstname),
+            'lastname': randomFromList(lastname),
+            'profiles': randomFromList(profiles),
+            'accounts': randomFromList(accounts)
+            /*'id': i,
+            'vin': randomString(17).toUpperCase(),
+            'stockNum': randomInteger(100000, 999999).toString(),
+            'type': randomFromList(['New', 'Pre-Owned']),
+            'year': randomInteger(2015, 2000),
+            'make': randomFromList(makes),
+            'model': randomFromList(models),
+            'trim': randomFromList(trims),
+            'extColor': randomFromList(colors),
+            'featPrice': randomInteger(60000, 5000),
+            'odo': randomInteger(120000),
+            'onSite': randomBoolean(),
+            'age': randomInteger(20)*/
+        });
+    }
+    return data;
+}
+
+function compare(columns, a, b) {
+    var result = _.reduce(columns, function (result, column) {
+        var field = _.keys(column)[0], 
+            dir = column[field],
+            first = (dir === 'asc') ? a : b,
+            second = (dir === 'asc') ? b : a;
+
+        if (result === 0) {
+            result = first[field].toString().localeCompare(second[field].toString());
+        }
+
+        return result;
+    }, 0);
+    return result;
+}
+
+function buildSortColumns(req) {
+    var i, cols = [], col, name, dir;
+    for (i = 0; i < 1000; i++) { // 1000 just an arbitrary limit
+        name = req.query['sCol_' + i];
+        dir = req.query['sDir_' + i] || 'asc';
+        
+        if (!name) {
+            break;
+        }
+
+        col = {};
+        col[name] = dir;
+        cols.push(col);
+    }
+
+    // add the ID as a tie-breaker to ensure consistent sort results
+    col = {};
+    col['id'] = 'asc';
+    cols.push(col);
+
+    return cols;
+}
+
+var queryData = generateData();
+app.get('/query', function (req, res) {
+    var start = Number(req.query.start || 0),
+        numRecs = Number(req.query.nRecs || 25),
+        sortCols = buildSortColumns(req),
+        newSearch = !!req.query.newSearch,
+        data;
+
+    if (newSearch) {
+        queryData = generateData();
+    }
+
+    if (sortCols.length > 0) {
+        queryData.sort(compare.bind(this, sortCols));
+    }
+    data = queryData.slice(start, start + numRecs);
+    
+        
+    res.json(data);
+});
+
+module.exports = app;

@@ -1,0 +1,9 @@
+﻿This file has details about current library versions used:
+
+angular-1.1.4
+bootstrap-2.2.2
+jquery-1.9.1
+requirejs-2.1.1
+underscore-1.4.4
+text-2.0.5
+globalize-13.04.26

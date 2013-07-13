@@ -1,0 +1,81 @@
+/* app css stylesheet */
+body html {
+    font-style:italic;
+    font-size: medium;
+    font-family: Avantgarde, sans-serif;
+    font-weight: 200;
+    color: #443636;
+}
+
+
+.nav-tabs > li > a {
+    color:#fff;text-decoration:none;
+}
+
+.menu {
+    list-style: none;
+    border-bottom: 0.1em solid black;
+    margin-bottom: 2em;
+    padding: 0 0 0.5em;
+}
+
+.menu:before {
+    content: "[";
+}
+
+.menu:after {
+    content: "]";
+}
+
+.menu > li {
+    display: inline;
+}
+
+.menu > li:before {
+    content: "|";
+    padding-right: 0.3em;
+}
+
+.menu > li:nth-child(1):before {
+    content: "";
+    padding: 0;
+}
+
+#app {
+    padding-top: 37px;
+    background: url(../img/header_background.png) left top repeat-x #fff;
+}
+
+.project {
+    border:solid 1px #ccc;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    border-radius: 5px;
+    padding:4px;
+    margin-bottom:15px;
+}
+
+ul.projectlist {
+    list-style-type: none; overflow: hidden;
+    margin-left: 0;
+}
+
+.slogan {
+    font-style:italic;
+    font-size: medium;
+    font-family: Avantgarde, sans-serif;
+    font-weight: 200;
+    color: #443636;
+}
+
+textarea{
+    width: 300px;
+    min-width:200px;
+    max-height:400px;
+
+    height:200px;
+    min-height:100px;
+    max-height:300px;
+
+    resize:vertical;
+}

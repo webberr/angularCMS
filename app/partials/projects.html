@@ -1,0 +1,14 @@
+<div class="container-fluid" ng-repeat="project in projects" ng-controller="DisplayProjects">
+	<div class="span2"><img class="img-rounded" ng-src="{{project.images_path}}{{project.main_image}}"/></div>
+	<div class="span6 project">
+		<ul class="projectlist">
+		<li><b>{{project.name}}</b></li>
+		<li>owner:  {{project.owner}}</li>
+		<li>architect:  {{project.architect}}</li>
+		<li>{{project.size}}</li>
+		<li><!-- ng-hide="hideMore"-->{{project.description}}</li>	
+		<!--<li><button class="button btn-link small" ng-click="showMore()">{{textControl}}</button></li>-->
+		</ul>
+	</div>
+</div>
+<div ng-include src='"partials/footer.html"'></div>
